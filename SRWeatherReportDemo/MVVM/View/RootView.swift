@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct RootView: View {
     @ObservedObject var vm:RootViewModel
+   
     
     var body: some View {
         NavigationStack {
@@ -19,6 +21,11 @@ struct RootView: View {
                     keyWithTextField1(key: "Latitude", placeholder: "44.34")
                     keyWithTextField2(key: "Longitude", placeholder: "10.99")
                     submit
+                    Spacer().frame(height:20)
+                    if vm.showActivityView == true{
+                        ActivityIndicator(isAnimating: true, style: UIActivityIndicatorView.Style.large, color: UIColor.blue)
+                    }
+                    
                 }
             }
             .navigationDestination(isPresented: $vm.isSubmit, destination: {
@@ -28,6 +35,7 @@ struct RootView: View {
             })
             .navigationTitle(Text("Weather Report"))
         }
+        
     }
     func keyWithTextField1(key:String, placeholder:String) -> some View{
         VStack(alignment: .leading){

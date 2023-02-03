@@ -12,12 +12,15 @@ class RootViewModel: ObservableObject{
     @Published var longitude:String = "10.99"
     @Published var isSubmit:Bool = false
     
+    @Published var showActivityView:Bool = false
+    
     let networkManager:NetworkManager
     
     init(networkManager: NetworkManager = NetworkManager()) {
         self.networkManager = networkManager
     }
     func submit(){
+        self.showActivityView = true
         
         guard let url = URL(string: APPURL.weatherUrl) else {
             return
@@ -35,6 +38,9 @@ class RootViewModel: ObservableObject{
         if let _url = components.url {
             let urlReq = URLRequest(url: _url)
             self.networkManager.fetchRequest(urlReq: urlReq, modelType: Forecast.self) {[weak self] result in
+                DispatchQueue.main.async {
+                    self?.showActivityView = false
+                }
                 switch result {
                 case .failure(let err):
                     print("\(err.localizedDescription)")
